@@ -19,6 +19,21 @@
 <link rel="apple-touch-icon" href="/assets/icon128.png">
 <link rel="stylesheet" href="/assets/site.css">
 
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>
+  (function () {
+    var cfg = {"env":"sandbox","token":"test_7ccc73692a4edc1c0838823e156","priceId":"pri_01m7r4aher59wasd8jfv06gb1t","locale":"tr","successUrl":"https://historycleaner.app/tr/thanks/"};
+    if (cfg.env === 'sandbox') Paddle.Environment.set('sandbox');
+    Paddle.Initialize({ token: cfg.token });
+    function open() {
+      Paddle.Checkout.open({
+        items: [{ priceId: cfg.priceId, quantity: 1 }],
+        settings: { displayMode: 'overlay', theme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light', locale: cfg.locale, successUrl: cfg.successUrl }
+      });
+    }
+    document.getElementById('checkoutBtn').addEventListener('click', open);
+  })();
+</script>
 </head>
 <body>
 <header class="top"><div class="wrap top-in">
@@ -52,7 +67,7 @@
   <h1>History Domain Cleaner Pro’yu alın</h1>
   <p class="lead">Tek seferlik $5.99. Ömür boyu lisans, abonelik yok.</p>
   <ul class="checks"><li>Şifreli kasa</li><li>Sınırsız otomatik kural</li><li>14 gün para iade garantisi</li></ul>
-  <p class="notice">Satın alma çok yakında açılıyor. Bu arada Pro’yu eklentinin içinden 14 gün ücretsiz deneyebilirsiniz. Sorular: <a href="mailto:support@historycleaner.app">support@historycleaner.app</a></p>
+  <p><button id="checkoutBtn" class="btn" type="button">Güvenli ödemeye devam et — $5.99</button></p><p class="small">Ödemeler, Satıcı Kaydımız (Merchant of Record) olan Paddle.com tarafından güvenle işlenir. Vergiler ödeme sırasında hesaplanır.</p><p>Ödemeden sonra lisans anahtarınız, ödeme sırasında girdiğiniz e-posta adresine gönderilir — genellikle birkaç saat içinde, en geç 24 saatte. Eklentiyi açın → Pro → anahtarı yapıştırın → Etkinleştir.</p>
 </div></main>
 <footer class="foot"><div class="wrap foot-in">
   <span>© 2026 Hüseyin Örer · History Domain Cleaner</span>

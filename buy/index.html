@@ -19,6 +19,21 @@
 <link rel="apple-touch-icon" href="/assets/icon128.png">
 <link rel="stylesheet" href="/assets/site.css">
 
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>
+  (function () {
+    var cfg = {"env":"sandbox","token":"test_7ccc73692a4edc1c0838823e156","priceId":"pri_01m7r4aher59wasd8jfv06gb1t","locale":"en","successUrl":"https://historycleaner.app/thanks/"};
+    if (cfg.env === 'sandbox') Paddle.Environment.set('sandbox');
+    Paddle.Initialize({ token: cfg.token });
+    function open() {
+      Paddle.Checkout.open({
+        items: [{ priceId: cfg.priceId, quantity: 1 }],
+        settings: { displayMode: 'overlay', theme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light', locale: cfg.locale, successUrl: cfg.successUrl }
+      });
+    }
+    document.getElementById('checkoutBtn').addEventListener('click', open);
+  })();
+</script>
 </head>
 <body>
 <header class="top"><div class="wrap top-in">
@@ -52,7 +67,7 @@
   <h1>Get History Domain Cleaner Pro</h1>
   <p class="lead">One-time payment of $5.99. Lifetime license, no subscription.</p>
   <ul class="checks"><li>Encrypted vault</li><li>Unlimited automatic rules</li><li>14-day money-back guarantee</li></ul>
-  <p class="notice">Purchases open very soon. Meanwhile you can try Pro free for 14 days inside the extension. Questions: <a href="mailto:support@historycleaner.app">support@historycleaner.app</a></p>
+  <p><button id="checkoutBtn" class="btn" type="button">Continue to secure checkout — $5.99</button></p><p class="small">Payments are processed securely by Paddle.com, our Merchant of Record. Taxes are calculated at checkout.</p><p>After payment, your license key is emailed to the address you enter at checkout — usually within a few hours, at most 24 hours. Open the extension → Pro → paste the key → Activate.</p>
 </div></main>
 <footer class="foot"><div class="wrap foot-in">
   <span>© 2026 Hüseyin Örer · History Domain Cleaner</span>
