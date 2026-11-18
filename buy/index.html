@@ -21,18 +21,33 @@
 
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <script>
-  (function () {
+  // Runs after the page is parsed (this script sits in <head>, before the button exists).
+  document.addEventListener('DOMContentLoaded', function () {
     var cfg = {"env":"sandbox","token":"test_7ccc73692a4edc1c0838823e156","priceId":"pri_01m7r4aher59wasd8jfv06gb1t","locale":"en","successUrl":"https://historycleaner.app/thanks/"};
-    if (cfg.env === 'sandbox') Paddle.Environment.set('sandbox');
-    Paddle.Initialize({ token: cfg.token });
-    function open() {
-      Paddle.Checkout.open({
-        items: [{ priceId: cfg.priceId, quantity: 1 }],
-        settings: { displayMode: 'overlay', theme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light', locale: cfg.locale, successUrl: cfg.successUrl }
-      });
+    var btn = document.getElementById('checkoutBtn');
+    var err = document.getElementById('checkoutErr');
+    function fail(detail) {
+      err.hidden = false;
+      if (detail && window.console) console.error('Paddle checkout:', detail);
     }
-    document.getElementById('checkoutBtn').addEventListener('click', open);
-  })();
+    if (!window.Paddle) { fail('paddle.js did not load (blocked by an extension or network?)'); return; }
+    try {
+      if (cfg.env === 'sandbox') Paddle.Environment.set('sandbox');
+      Paddle.Initialize({
+        token: cfg.token,
+        eventCallback: function (e) { if (e && e.name === 'checkout.error') fail(e); }
+      });
+    } catch (e) { fail(e); return; }
+    btn.addEventListener('click', function () {
+      err.hidden = true;
+      try {
+        Paddle.Checkout.open({
+          items: [{ priceId: cfg.priceId, quantity: 1 }],
+          settings: { displayMode: 'overlay', theme: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light', locale: cfg.locale, successUrl: cfg.successUrl }
+        });
+      } catch (e) { fail(e); }
+    });
+  });
 </script>
 </head>
 <body>
@@ -67,7 +82,7 @@
   <h1>Get History Domain Cleaner Pro</h1>
   <p class="lead">One-time payment of $5.99. Lifetime license, no subscription.</p>
   <ul class="checks"><li>Encrypted vault</li><li>Unlimited automatic rules</li><li>14-day money-back guarantee</li></ul>
-  <p><button id="checkoutBtn" class="btn" type="button">Continue to secure checkout — $5.99</button></p><p class="small">Payments are processed securely by Paddle.com, our Merchant of Record. Taxes are calculated at checkout.</p><p>After payment, your license key is emailed to the address you enter at checkout — usually within a few hours, at most 24 hours. Open the extension → Pro → paste the key → Activate.</p>
+  <p><button id="checkoutBtn" class="btn" type="button">Continue to secure checkout — $5.99</button></p><p id="checkoutErr" class="notice" role="alert" hidden>The checkout could not open. If you use an ad or tracker blocker, allow this page and try again — or email <a href="mailto:support@historycleaner.app">support@historycleaner.app</a> and we will help.</p><p class="small">Payments are processed securely by Paddle.com, our Merchant of Record. Taxes are calculated at checkout.</p><p>After payment, your license key is emailed to the address you enter at checkout — usually within a few hours, at most 24 hours. Open the extension → Pro → paste the key → Activate.</p>
 </div></main>
 <footer class="foot"><div class="wrap foot-in">
   <span>© 2026 Hüseyin Örer · History Domain Cleaner</span>
